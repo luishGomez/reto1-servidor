@@ -6,6 +6,7 @@
 package main;
 
 import clases.Mensaje;
+import clases.User;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -38,19 +39,37 @@ public class SocketHilo extends Thread{
             //Empezamos a interpretar
             if(libre){
                 try{
-                Mensaje mensajeInicio = (Mensaje) flujo_entrada.readObject();
+                    Mensaje mensajeInicio = (Mensaje) flujo_entrada.readObject();
                     switch(mensajeInicio.getOpc()){
                         case 1:
-                            //if()
+                            String login= ((User)mensajeInicio.getData()).getLogin();
+                            Mensaje mensajeFin=null;
+                            //if(dao.verificaLogin(login)){
+                            if(true){
+                                //DAO.REGISTRAR
+                                mensajeFin= new Mensaje(1,true);
+                            }else{
+                                mensajeFin= new Mensaje(-2,"Ya existe alguien con ese ID login.");
+                            }
+                            flujo_salida.writeObject(mensajeFin);
+                            break;
+                        case 2:
+                            
                     }
                 }catch(ClassNotFoundException e){
                     LOGGER.severe(e.getMessage());
                 }
             }else{
-            
+                try{
+                    Mensaje peticion =(Mensaje) flujo_entrada.readObject();
+                }catch(ClassNotFoundException e){
+                    LOGGER.severe(e.getMessage());
+                }
+                Mensaje mensaje = new Mensaje(-1,"Estamos ocupados");
+                flujo_salida.writeObject(mensaje);
             }
             
-           
+            
             flujo_salida.close();
             flujo_entrada.close();
             miSocket.close();
@@ -59,7 +78,7 @@ public class SocketHilo extends Thread{
         }finally{
             try{
                 if(flujo_salida!=null)
-                       flujo_salida.close();
+                    flujo_salida.close();
                 if(flujo_entrada!=null)
                     flujo_entrada.close();
                 if(miSocket!=null)
@@ -68,7 +87,5 @@ public class SocketHilo extends Thread{
                 LOGGER.severe(e.getMessage());
             }
         }
-        
-        
     }
 }
