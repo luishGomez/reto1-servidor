@@ -82,8 +82,8 @@ public class SocketHilo extends Thread{
                             //DAO.Verificar
                             User user=dao.verificarLoginPassword(login, password);
                             if(user!=null){
-                                //dao. las acceschange
-                                
+                                dao.ultimoAcceso(login);
+                                LOGGER.info("Ultimo acceso actualizado.");
                                 mensajeFin=new Mensaje(2,user);
                             }else{
                                 if(dao.verificarLogin(login)){
