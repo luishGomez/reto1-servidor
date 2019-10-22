@@ -30,9 +30,9 @@ public class DAOImplementation implements DAO{
     private String userBD;
     private String passwordBD;
 
-    public DAOImplementation(ConexionPool poolBD, ResourceBundle configFile) {
+    public DAOImplementation(ConexionPool poolBD, String configFile) {
         this.poolBD = poolBD;
-        this.configFile = ResourceBundle.getBundle("configFile");
+        this.configFile = ResourceBundle.getBundle(configFile);
         this.driverBD = this.configFile.getString("Driver");
         this.urlBD = this.configFile.getString("Con");
         this.userBD = this.configFile.getString("DBUser");
