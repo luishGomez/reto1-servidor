@@ -36,7 +36,7 @@ public class SocketHilo extends Thread{
             flujo_entrada=new ObjectInputStream(miSocket.getInputStream());
             flujo_salida= new ObjectOutputStream(miSocket.getOutputStream());
             
-            //Empezamos a interpretar
+            //Empezamos a interpretar segunda opc
             if(libre){
                 try{
                     Mensaje mensajeInicio = (Mensaje) flujo_entrada.readObject();
