@@ -5,10 +5,17 @@
  */
 package dataAccess;
 
+import clases.*;
+
 /**
- *
- * @author 2dam
+ * Interfaz DAO, con las querys a la base de datos.
+ * @author Luis Gómez
  */
 public interface DAO {
     
+    public boolean verificarLogin(String login) throws DAOException;
+    
+    public User verificarLoginPassword(String login, String password) throws DAOException;
+    
+    public boolean registrarUser(User usuario) throws DAOException;
 }
