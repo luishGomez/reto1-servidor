@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -197,5 +198,23 @@ public class DAOImplementation implements DAO{
             this.cerrarConexion();
         }
         return registradoCorrecto;
+    }
+
+    /**
+     * Actualiza la fecha del ultimo acceso.
+     * @param login login del usuario.
+     * @throws DAOException 
+     */
+    @Override
+    public void ultimoAcceso(String login) throws DAOException {
+        try{
+            this.abrirConexion();
+            String update = "update user set lastAccess="+ new Date();
+            pstmt.executeUpdate(update);
+            this.cerrarConexion();
+        }catch(Exception e){
+            LOGGER.severe(e.getMessage());
+            this.cerrarConexion();
+        }
     }
 }
