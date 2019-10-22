@@ -46,26 +46,23 @@ public class DAOImplementation implements DAO{
     private void abrirConexion(){
         LOGGER.info("Obteniendo conexión con la BD.");
         try{
-            //Si hay pool lo usamos
            if(poolBD != null){
                this.con = poolBD.extraerConexion();
            }
-           //Si no creamos una nueva conexión mediante DriverManager
            else{
                Class.forName(this.driverBD);
                this.con = 
                     DriverManager.getConnection(urlBD,userBD,passwordBD);
            }
-           //por defecto ponemos el autocommit de la conexión a true
            this.con.setAutoCommit(true);
         }catch(SQLException e){
-            LOGGER.severe("Error al crear Conexión con BD." + 
+            LOGGER.severe("Error al crear conexión con BD." + 
                     "No se puede obtener conexión:" + e.getMessage());
             /*throw new DAOException("Error al crear Conexión con BD."+
                            "No se puede obtener conexión:"+e.getMessage());*/
             
         }catch(ClassNotFoundException e){
-            LOGGER.severe("Error al crear Conexión con BD:" + 
+            LOGGER.severe("Error al crear conexión con BD:" + 
                     "No se puede cargar la clase del Driver.");
             /*throw new DAOException("Error al crear Conexión con BD:"+
                            "No se puede cargar la clase del Driver.");*/
@@ -132,6 +129,7 @@ public class DAOImplementation implements DAO{
     public User verificarLoginPassword(String login, String password) 
             throws DAOException {
         boolean loginCorrecto = false;
+        User usuario = null;
         try{
             this.abrirConexion();
             String select = "select * from user where login=" + login + 
@@ -159,22 +157,20 @@ public class DAOImplementation implements DAO{
                     }else{
                         privilege = UserPrivilege.USER;
                     }
-                    User usuario = new User(rs.getInt("id"),
+                    usuario = new User(rs.getInt("id"),
                             rs.getString("login"),rs.getString("email"),
                             rs.getString("fullname"),status,privilege,
                             rs.getString("password"),rs.getDate("lastAccess"),
                             rs.getDate("lastPasswordChange"));
                 }
                 rs.close();
-            }else{
-                //Login Incorrecto
             }
             this.cerrarConexion();
         }catch (Exception e){
             LOGGER.severe(e.getMessage());
             this.cerrarConexion();
         }
-        return null;
+        return usuario;
     }
     /**
      * Añade un objeto usuario a la base de datos.
