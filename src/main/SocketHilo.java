@@ -7,6 +7,9 @@ package main;
 
 import clases.Mensaje;
 import clases.User;
+import dataAccess.DAO;
+import dataAccess.DAOException;
+import dataAccess.DAOFactory;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,38 +28,80 @@ public class SocketHilo extends Thread{
     private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("main.Servidor");
     private Socket miSocket;
     private boolean libre;
+    private DAO dao=DAOFactory.getDao();
+    /**
+     * El constructor del Socket Hilo.
+     * The constructor of the Socket Thread.
+     * @param miSocket El socket creado / The previous created socket.
+     * @param libre Un booleano que expresa si esta libre el servidor o no /A
+     * boolean who expresses whether the server is free or not.
+     */
     public SocketHilo(Socket miSocket,boolean libre){
         this.miSocket = miSocket;
         this.libre = libre;
     }
+    /**
+     * Este metodo es el inicio de la ejecución del hilo.
+     * This method is the start of thread execution.
+     */
     public void run(){
         ObjectInputStream flujo_entrada = null;
         ObjectOutputStream flujo_salida = null;
         try{
+            //Iniciamos los flujos.
             flujo_entrada=new ObjectInputStream(miSocket.getInputStream());
             flujo_salida= new ObjectOutputStream(miSocket.getOutputStream());
             
-            //Empezamos a interpretar
+            //Si esta libre el servidor tratamos al cliente.
             if(libre){
+                String login = null;
+                Mensaje mensajeFin=null;
                 try{
+                    //Tratamos el mensaje de petición del cliente.
                     Mensaje mensajeInicio = (Mensaje) flujo_entrada.readObject();
                     switch(mensajeInicio.getOpc()){
                         case 1:
-                            String login= ((User)mensajeInicio.getData()).getLogin();
-                            Mensaje mensajeFin=null;
-                            //if(dao.verificaLogin(login)){
-                            if(true){
-                                //DAO.REGISTRAR
+                            LOGGER.info("Iniciamos el REGRISTRO.");
+                            
+                            login= ((User)mensajeInicio.getData()).getLogin();
+                            if(dao.verificarLogin(login)){
+                                dao.registrarUser((User)mensajeInicio.getData());
                                 mensajeFin= new Mensaje(1,true);
                             }else{
                                 mensajeFin= new Mensaje(-2,"Ya existe alguien con ese ID login.");
                             }
                             flujo_salida.writeObject(mensajeFin);
+                            
+                            LOGGER.info("REGRISTRO terminado.");
                             break;
                         case 2:
+                            LOGGER.info("Iniciamos el INICIO SESIÓN.");
+                            
+                            login= ((User)mensajeInicio.getData()).getLogin();
+                            String password =((User)mensajeInicio.getData()).getPassword();
+                            //DAO.Verificar
+                            User user=dao.verificarLoginPassword(login, password);
+                            if(user!=null){
+                                //dao. las acceschange
+                                
+                                mensajeFin=new Mensaje(2,user);
+                            }else{
+                                if(dao.verificarLogin(login)){
+                                    mensajeFin=new Mensaje(-4,"La constraseña no es correcta");
+                                }else{
+                                    mensajeFin=new Mensaje(-3,"El id de login no existe");
+                                }
+                            }
+                            flujo_salida.writeObject(mensajeFin);
+                            Servidor.liberarHilo();
+                            
+                            LOGGER.info("INICIO SESIÓN terminado.");
+                            break;
                             
                     }
                 }catch(ClassNotFoundException e){
+                    LOGGER.severe(e.getMessage());
+                } catch (DAOException e) {
                     LOGGER.severe(e.getMessage());
                 }
             }else{
@@ -84,7 +129,7 @@ public class SocketHilo extends Thread{
                 if(miSocket!=null)
                     miSocket.close();
             }catch(IOException e){
-                LOGGER.severe(e.getMessage());
+                LOGGER.severe("NO SE HAN CERRADO BIEN LOS FLUJOS/SOCKET ||"+e.getMessage());
             }
         }
     }
