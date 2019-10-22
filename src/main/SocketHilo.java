@@ -25,10 +25,21 @@ public class SocketHilo extends Thread{
     private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("main.Servidor");
     private Socket miSocket;
     private boolean libre;
+    /**
+     * El constructor del Socket Hilo.
+     * The constructor of the Socket Thread.
+     * @param miSocket El socket creado / The previous created socket.
+     * @param libre Un booleano que expresa si esta libre el servidor o no /A 
+     * boolean who expresses whether the server is free or not.
+     */
     public SocketHilo(Socket miSocket,boolean libre){
         this.miSocket = miSocket;
         this.libre = libre;
     }
+    /**
+     * Este metodo es el inicio de la ejecución del hilo.
+     * This method is the start of thread execution.
+     */
     public void run(){
         ObjectInputStream flujo_entrada = null;
         ObjectOutputStream flujo_salida = null;
@@ -38,12 +49,13 @@ public class SocketHilo extends Thread{
             
             //Empezamos a interpretar
             if(libre){
+                String login = null;
+                Mensaje mensajeFin=null;
                 try{
                     Mensaje mensajeInicio = (Mensaje) flujo_entrada.readObject();
                     switch(mensajeInicio.getOpc()){
                         case 1:
-                            String login= ((User)mensajeInicio.getData()).getLogin();
-                            Mensaje mensajeFin=null;
+                            login= ((User)mensajeInicio.getData()).getLogin();
                             //if(dao.verificaLogin(login)){
                             if(true){
                                 //DAO.REGISTRAR
@@ -54,6 +66,26 @@ public class SocketHilo extends Thread{
                             flujo_salida.writeObject(mensajeFin);
                             break;
                         case 2:
+                            login= ((User)mensajeInicio.getData()).getLogin();
+                            String password =((User)mensajeInicio.getData()).getPassword();
+                            //DAO.Verificar
+                            Boolean verdadero=true;
+                            if(verdadero){
+                                //dao. las acceschange
+                                //dao dame user
+                                User user=new User();
+                                mensajeFin=new Mensaje(2,user);
+                            }else{
+                                //verificar id
+                                boolean idLogindExiste=true;
+                                if(idLogindExiste){
+                                    mensajeFin=new Mensaje(-3,"El id de login no existe");
+                                }else{
+                                    mensajeFin=new Mensaje(-4,"La constraseña no es correcta");
+                                }
+                            }
+                            flujo_salida.writeObject(mensajeFin);
+                            Servidor.liberarHilo();
                             
                     }
                 }catch(ClassNotFoundException e){
