@@ -58,13 +58,15 @@ public class SocketHilo extends Thread{
                 Mensaje mensajeFin=null;
                 try{
                     //Tratamos el mensaje de petición del cliente.
+                    LOGGER.info("Vamos a coger el mensaje");
                     Mensaje mensajeInicio = (Mensaje) flujo_entrada.readObject();
+                    LOGGER.info("Vamos a intrepetar el mensaje");
                     switch(mensajeInicio.getOpc()){
                         case 1:
                             LOGGER.info("Iniciamos el REGRISTRO.");
                             
                             login= ((User)mensajeInicio.getData()).getLogin();
-                            if(dao.verificarLogin(login)){
+                            if(!dao.verificarLogin(login)){
                                 dao.registrarUser((User)mensajeInicio.getData());
                                 mensajeFin= new Mensaje(1,true);
                             }else{
@@ -93,16 +95,17 @@ public class SocketHilo extends Thread{
                                 }
                             }
                             flujo_salida.writeObject(mensajeFin);
-                            Servidor.liberarHilo();
                             
+                            
+                            Servidor.liberarHilo();
                             LOGGER.info("INICIO SESIÓN terminado.");
                             break;
                             
                     }
                 }catch(ClassNotFoundException e){
-                    LOGGER.severe(e.getMessage());
+                    LOGGER.severe("ClassNotFoundException "+e.getMessage());
                 } catch (DAOException e) {
-                    LOGGER.severe(e.getMessage());
+                    LOGGER.severe("DAOException "+e.getMessage());
                 }
             }else{
                 try{
@@ -128,6 +131,7 @@ public class SocketHilo extends Thread{
                     flujo_entrada.close();
                 if(miSocket!=null)
                     miSocket.close();
+                Servidor.liberarHilo();
             }catch(IOException e){
                 LOGGER.severe("NO SE HAN CERRADO BIEN LOS FLUJOS/SOCKET ||"+e.getMessage());
             }

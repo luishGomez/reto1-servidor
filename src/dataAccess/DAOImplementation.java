@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -35,7 +36,7 @@ public class DAOImplementation implements DAO{
         this.poolBD = poolBD;
         this.configFile = ResourceBundle.getBundle(configFile);
         this.driverBD = this.configFile.getString("Driver");
-        this.urlBD = this.configFile.getString("Con");
+        this.urlBD = this.configFile.getString("Conn");
         this.userBD = this.configFile.getString("DBUser");
         this.passwordBD = this.configFile.getString("DBPass");
         LOGGER.getLogger("");
@@ -105,7 +106,7 @@ public class DAOImplementation implements DAO{
         boolean loginExiste = false;
         try{
             this.abrirConexion();
-            String select = "select * from user where login=" + login;
+            String select = "select * from user where login='" + login+"'";
             pstmt = this.con.prepareStatement(select);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()){
@@ -133,8 +134,8 @@ public class DAOImplementation implements DAO{
         User usuario = null;
         try{
             this.abrirConexion();
-            String select = "select * from user where login=" + login + 
-                    " and password=" + password;
+            String select = "select * from user where login='" + login + 
+                    "' and password='" + password+"'";
             pstmt = this.con.prepareStatement(select);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()){
@@ -142,7 +143,7 @@ public class DAOImplementation implements DAO{
             }
             rs.close();
             if(loginCorrecto){
-                select = "select * from user where login=" + login;
+                select = "select * from user where login='" + login+"'";
                 pstmt = this.con.prepareStatement(select);
                 rs = pstmt.executeQuery();
                 while(rs.next()){
@@ -186,11 +187,11 @@ public class DAOImplementation implements DAO{
             this.abrirConexion();
             String insert = "insert into user (login,email,fullname,status,"
                     + "privilege, password, lastAccess, lastPasswordChange) "
-                    + "values"+usuario.getLogin()+","+usuario.getEmail()+","
-                    + usuario.getFullname()+","+usuario.getStatus()+","
-                    + usuario.getPrivilege()+","+usuario.getPassword()+","
-                    + usuario.getLastAccess()+","
-                    + usuario.getLastPasswordChange()+",";
+                    + "values('"+usuario.getLogin()+"','"+usuario.getEmail()+"','"
+                    + usuario.getFullname()+"',0,"
+                    + "1"+",'"+usuario.getPassword()+"',"
+                    + "date(now())"+","
+                    + "date(now())"+");";
             pstmt.executeUpdate(insert);
             this.cerrarConexion();
         }catch(Exception e){
@@ -209,7 +210,7 @@ public class DAOImplementation implements DAO{
     public void ultimoAcceso(String login) throws DAOException {
         try{
             this.abrirConexion();
-            String update = "update user set lastAccess="+ new Date();
+            String update = "update user set lastAccess=date(now())";
             pstmt.executeUpdate(update);
             this.cerrarConexion();
         }catch(Exception e){

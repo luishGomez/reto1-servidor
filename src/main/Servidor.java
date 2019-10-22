@@ -27,6 +27,7 @@ public class Servidor {
         try{
             serverSocket = new ServerSocket(puerto);
             while(true){
+                LOGGER.info("HILOS ACTUALES "+contador);
                 //Version 1
                 Socket socket = serverSocket.accept();
                 if(contador<=hilos){

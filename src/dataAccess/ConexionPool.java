@@ -19,7 +19,7 @@ import java.util.Stack;
 import java.util.ResourceBundle;
 //import java.util.logging.Logger;
 public class ConexionPool {
-    private   static String config;
+    private   static String config="dataAccess.dbConf";
     private   static ResourceBundle configFile;
     protected static Stack pool;
     protected static String connectionURL;
