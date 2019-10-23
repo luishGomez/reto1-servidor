@@ -1,16 +1,20 @@
 
 package dataAccess;
 
+import java.util.logging.Logger;
+
 /**
  *  
- * @author sergio
+ * @author sergio.
  */
 public class DAOFactory {
+    private static final Logger LOGGER = Logger.getLogger("dataAccess.daoFactory");
     /**
-     * 
-     * @return un DAO
+     * Crea un dao y lo devuelve.
+     * @return un DAO.
      */
-    public synchronized static DAOFactory getDao(){
-        return new DAOImplementation();
+    public synchronized static DAO getDao(){
+        LOGGER.info("Retornando un DAO.");
+        return new DAOImplementation(new ConexionPool(),"dataAccess.dbConf");
     }
 }
