@@ -131,7 +131,7 @@ public class SocketHilo extends Thread{
                     flujo_entrada.close();
                 if(miSocket!=null)
                     miSocket.close();
-                Servidor.liberarHilo();
+                //Servidor.liberarHilo();
             }catch(IOException e){
                 LOGGER.severe("NO SE HAN CERRADO BIEN LOS FLUJOS/SOCKET ||"+e.getMessage());
             }

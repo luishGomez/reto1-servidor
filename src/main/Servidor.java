@@ -49,5 +49,6 @@ public class Servidor {
      */
     synchronized static public void liberarHilo(){
         contador--;
+        LOGGER.info("HILOS ACTUALES "+contador);
     }
 }
