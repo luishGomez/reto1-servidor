@@ -74,6 +74,7 @@ public class SocketHilo extends Thread{
                             }
                             flujo_salida.writeObject(mensajeFin);
                             
+                            //Servidor.liberarHilo();
                             LOGGER.info("REGRISTRO terminado.");
                             break;
                         case 2:
@@ -97,7 +98,7 @@ public class SocketHilo extends Thread{
                             flujo_salida.writeObject(mensajeFin);
                             
                             
-                            Servidor.liberarHilo();
+                            //Servidor.liberarHilo();
                             LOGGER.info("INICIO SESIÓN terminado.");
                             break;
                             
@@ -131,7 +132,7 @@ public class SocketHilo extends Thread{
                     flujo_entrada.close();
                 if(miSocket!=null)
                     miSocket.close();
-                //Servidor.liberarHilo();
+                Servidor.liberarHilo();
             }catch(IOException e){
                 LOGGER.severe("NO SE HAN CERRADO BIEN LOS FLUJOS/SOCKET ||"+e.getMessage());
             }

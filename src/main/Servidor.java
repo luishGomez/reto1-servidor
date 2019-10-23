@@ -27,17 +27,21 @@ public class Servidor {
         try{
             serverSocket = new ServerSocket(puerto);
             while(true){
-                LOGGER.info("HILOS ACTUALES "+contador);
-                //Version 1
-                Socket socket = serverSocket.accept();
-                if(contador<=hilos){
-                    contador++;
-                    SocketHilo socketHilo=new SocketHilo(socket,true);
-                    socketHilo.start();
-                }else{
-                    SocketHilo socketHilo=new SocketHilo(socket,false);
-                    socketHilo.start();
+                
+                try{
+                    Socket socket = serverSocket.accept();
+                    if(acceso()){
+                        incrementarHilo();
+                        SocketHilo socketHilo=new SocketHilo(socket,true);
+                        socketHilo.start();
+                    }else{
+                        SocketHilo socketHilo=new SocketHilo(socket,false);
+                        socketHilo.start();
+                    }
+                }catch(IOException e){
+                    LOGGER.severe("Petición faillda "+e.getMessage());
                 }
+                
             }
         }catch(IOException e){
             LOGGER.severe(e.getMessage());
@@ -50,5 +54,16 @@ public class Servidor {
     synchronized static public void liberarHilo(){
         contador--;
         LOGGER.info("HILOS ACTUALES "+contador);
+    }
+    synchronized static public void incrementarHilo(){
+        contador++;
+        LOGGER.info("HILOS ACTUALES "+contador);
+    }
+    synchronized static public boolean acceso(){
+        boolean resu=false;
+        if(contador<=hilos){
+            resu=true;
+        }
+        return resu;
     }
 }

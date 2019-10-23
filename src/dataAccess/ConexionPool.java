@@ -41,7 +41,7 @@ public class ConexionPool {
      * @return una conexion nueva o una ya abierta
      * @throws SQLException 
      */
-    public synchronized static Connection extraerConexion() throws SQLException{   
+    public synchronized  Connection extraerConexion() throws SQLException{   
 	   if(!pool.empty()) { 
                return (Connection) pool.pop();
            } 
@@ -54,7 +54,8 @@ public class ConexionPool {
      * @param conn la conexion que se quiere cerrar
      * @throws SQLException
      */
-     public synchronized static void liberarConexion(Connection conn)throws SQLException{ 
+     public synchronized  void liberarConexion(Connection conn){ 
+         //throws SQLException
 	    pool.push(conn);
     }
     
