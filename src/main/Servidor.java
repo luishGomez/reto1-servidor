@@ -18,8 +18,8 @@ import java.util.ResourceBundle;
  */
 public class Servidor {
     private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("main.Servidor");
-    private static int puerto = Integer.parseInt(ResourceBundle.getBundle("main.serverConf").getString("port"));
-    private static int hilos = Integer.parseInt(ResourceBundle.getBundle("main.serverConf").getString("threads"));
+    private static final int puerto = Integer.parseInt(ResourceBundle.getBundle("main.serverConf").getString("port"));
+    private static final int hilos = Integer.parseInt(ResourceBundle.getBundle("main.serverConf").getString("threads"));
     private static int contador=0;
     
     public static void main(String[] args){
