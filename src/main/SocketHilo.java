@@ -105,8 +105,14 @@ public class SocketHilo extends Thread{
                     }
                 }catch(ClassNotFoundException e){
                     LOGGER.severe("ClassNotFoundException "+e.getMessage());
+                    //Enviamos una respuesta del error
+                    mensajeFin=new Mensaje(-6,"Error al interpretar el mensaje");
+                    flujo_salida.writeObject(mensajeFin);
                 } catch (DAOException e) {
                     LOGGER.severe("DAOException "+e.getMessage());
+                    //Enviamos una respuesta del error
+                    mensajeFin=new Mensaje(-5,"Fallo de la base de datos");
+                    flujo_salida.writeObject(mensajeFin);
                 }
             }else{
                 try{
