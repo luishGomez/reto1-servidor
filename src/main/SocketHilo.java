@@ -68,7 +68,7 @@ public class SocketHilo extends Thread{
                             login= ((User)mensajeInicio.getData()).getLogin();
                             if(!dao.verificarLogin(login)){
                                 dao.registrarUser((User)mensajeInicio.getData());
-                                mensajeFin= new Mensaje(1,true);
+                                mensajeFin= new Mensaje(1,(Boolean)true);
                             }else{
                                 mensajeFin= new Mensaje(-2,"Ya existe alguien con ese ID login.");
                             }
