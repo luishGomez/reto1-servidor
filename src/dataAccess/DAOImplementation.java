@@ -123,6 +123,7 @@ public class DAOImplementation implements DAO{
             rs.close();
         }catch (Exception e){
             LOGGER.severe(e.getMessage());
+            throw new DAOException();
         }finally{
             this.poolBD.liberarConexion(this.con); 
         }
@@ -178,6 +179,7 @@ public class DAOImplementation implements DAO{
             }
         }catch (Exception e){
             LOGGER.severe(e.getMessage());
+            throw new DAOException();
         }finally{
             this.poolBD.liberarConexion(this.con); 
         }
@@ -205,6 +207,7 @@ public class DAOImplementation implements DAO{
             pstmt.executeUpdate(insert);
         }catch(Exception e){
             LOGGER.severe(e.getMessage());
+            throw new DAOException();
         }finally{
             this.poolBD.liberarConexion(this.con); 
         }
@@ -225,6 +228,7 @@ public class DAOImplementation implements DAO{
             pstmt.executeUpdate(update);
         }catch(Exception e){
             LOGGER.severe(e.getMessage());
+            throw new DAOException();
         }finally{
             this.poolBD.liberarConexion(this.con); 
         }
