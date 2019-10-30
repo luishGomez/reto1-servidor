@@ -35,6 +35,7 @@ public class Servidor {
                         SocketHilo socketHilo=new SocketHilo(socket,true);
                         socketHilo.start();
                     }else{
+                        incrementarHilo();
                         SocketHilo socketHilo=new SocketHilo(socket,false);
                         socketHilo.start();
                     }
