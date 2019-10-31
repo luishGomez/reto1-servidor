@@ -109,7 +109,7 @@ public class SocketHilo extends Thread{
                     mensajeFin=new Mensaje(-6,"Error al interpretar el mensaje");
                     flujo_salida.writeObject(mensajeFin);
                 } catch (DAOException e) {
-                    LOGGER.severe("DAOException "+e.getMessage());
+                    LOGGER.severe("DAOException No connection with the DB");
                     //Enviamos una respuesta del error
                     mensajeFin=new Mensaje(-5,"Fallo de la base de datos");
                     flujo_salida.writeObject(mensajeFin);
@@ -125,9 +125,9 @@ public class SocketHilo extends Thread{
             }
             
             
-            flujo_salida.close();
-            flujo_entrada.close();
-            miSocket.close();
+            //flujo_salida.close();
+            //flujo_entrada.close();
+            //miSocket.close();
         }catch(IOException e){
             LOGGER.severe(e.getMessage());
         }finally{
@@ -136,9 +136,10 @@ public class SocketHilo extends Thread{
                     flujo_salida.close();
                 if(flujo_entrada!=null)
                     flujo_entrada.close();
-                if(miSocket!=null)
+                if(!miSocket.isClosed())                    
                     miSocket.close();
-                Servidor.liberarHilo();
+                if(libre)
+                    Servidor.liberarHilo();
             }catch(IOException e){
                 LOGGER.severe("NO SE HAN CERRADO BIEN LOS FLUJOS/SOCKET ||"+e.getMessage());
             }

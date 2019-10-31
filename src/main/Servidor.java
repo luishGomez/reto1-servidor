@@ -26,6 +26,7 @@ public class Servidor {
         ServerSocket serverSocket=null;
         try{
             serverSocket = new ServerSocket(puerto);
+            LOGGER.info("SERVER ACTIVO!!!");
             while(true){
                 
                 try{
@@ -35,7 +36,7 @@ public class Servidor {
                         SocketHilo socketHilo=new SocketHilo(socket,true);
                         socketHilo.start();
                     }else{
-                        incrementarHilo();
+                        //incrementarHilo();
                         SocketHilo socketHilo=new SocketHilo(socket,false);
                         socketHilo.start();
                     }
@@ -62,7 +63,7 @@ public class Servidor {
     }
     synchronized static public boolean acceso(){
         boolean resu=false;
-        if(contador<=hilos){
+        if(contador<hilos){
             resu=true;
         }
         return resu;

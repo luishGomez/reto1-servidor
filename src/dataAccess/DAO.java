@@ -20,4 +20,5 @@ public interface DAO {
     public boolean registrarUser(User usuario) throws DAOException;
     
     public void ultimoAcceso(String login) throws DAOException;
+    
 }
