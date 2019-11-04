@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package dataAccess;
 
 import java.sql.Connection;
@@ -19,6 +19,7 @@ import java.util.Stack;
 import java.util.ResourceBundle;
 //import java.util.logging.Logger;
 public class ConexionPool {
+    private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("dataAccess.ConexionPool");
     private   static String config="dataAccess.dbConf";
     private   static ResourceBundle configFile;
     protected static Stack pool;
@@ -39,24 +40,24 @@ public class ConexionPool {
     /**
      * crea una conexin a la base de datos
      * @return una conexion nueva o una ya abierta
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public synchronized  Connection extraerConexion() throws SQLException{   
-	   if(!pool.empty()) { 
-               return (Connection) pool.pop();
-           } 
-           else {  
-               return DriverManager.getConnection(connectionURL, userName, password);
-	   } 
+    public synchronized  Connection extraerConexion() throws SQLException{
+        if(!pool.empty()) {
+            return (Connection) pool.pop();
+        }
+        else {
+            return DriverManager.getConnection(connectionURL, userName, password);
+        }
     }
     /**
      * liberamos la conexion a la base de datos
      * @param conn la conexion que se quiere cerrar
      * @throws SQLException
      */
-     public synchronized  void liberarConexion(Connection conn){ 
-         //throws SQLException
-	    pool.push(conn);
+    public synchronized  void liberarConexion(Connection conn){
+        //throws SQLException
+        pool.push(conn);
     }
     
     
