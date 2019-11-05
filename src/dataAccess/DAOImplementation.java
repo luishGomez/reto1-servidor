@@ -1,8 +1,3 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
 package dataAccess;
 
 import clases.*;
@@ -19,6 +14,8 @@ import java.util.logging.Logger;
 /**
  * Esta clase es la implementación de la interfaz DAO, que permite la conexión
  * con nuestra base de datos.
+ * This class is the implementation of the DAO interface, which allows 
+ * connection to our database.
  * @author Luis Gómez
  */
 public class DAOImplementation implements DAO{
@@ -35,83 +32,22 @@ public class DAOImplementation implements DAO{
     public DAOImplementation(ConexionPool poolBD) {
         
         this.poolBD = poolBD;
-        /*
-        this.configFile = ResourceBundle.getBundle(configFile);
-        this.driverBD = this.configFile.getString("Driver");
-        this.urlBD = this.configFile.getString("Conn");
-        this.userBD = this.configFile.getString("DBUser");
-        this.passwordBD = this.configFile.getString("DBPass");
-        LOGGER.getLogger("");
-        */
+        
     }
     
-    /**
-     * Obtiene una conexión del pool para la base de datos.
-     */
-    /*
-    private void abrirConexion(){
-    LOGGER.info("Obteniendo conexión con la BD.");
-    try{
-    if(poolBD != null){
-    this.con = poolBD.extraerConexion();
-    }
-    else{
-    Class.forName(this.driverBD);
-    this.con =
-    DriverManager.getConnection(urlBD,userBD,passwordBD);
-    }
-    this.con.setAutoCommit(true);
-    }catch(SQLException e){
-    LOGGER.severe("Error al crear conexión con BD." +
-    "No se puede obtener conexión:" + e.getMessage());
-    /*throw new DAOException("Error al crear Conexión con BD."+
-    "No se puede obtener conexión:"+e.getMessage());
-    
-    }catch(ClassNotFoundException e){
-    LOGGER.severe("Error al crear conexión con BD:" +
-    "No se puede cargar la clase del Driver.");
-    /*throw new DAOException("Error al crear Conexión con BD:"+
-    "No se puede cargar la clase del Driver.");
-    }
-    }
-    */
-    /**
-     * Cierra la conexión establecida con la base de datos.
-     */
-    /*
-    private void cerrarConexion(){
-    LOGGER.info("Liberando conexión con la BD.");
-    try{
-    //Si hay pool liberamos la conexión hacia el pool
-    if(poolBD != null){
-    poolBD.liberarConexion(con);
-    this.con=null;
-    }
-    //Si no cerramos la conexión creada mediante el DriverManager
-    else{
-    this.con.close();
-    this.con = null;
-    }
-    }catch(SQLException e){
-    LOGGER.severe("Error al liberar Conexión con BD:\n" +
-    "SQLERROR="+e.getMessage());
-    /*throw new DAOException("Error al liberar Conexión con BD:\n"+
-    "SQLERROR="+e.getMessage());
-    
-    }
-    }
-    */
     /**
      * Comprueba que el login no exista ya en la base de datos.
-     * @param login login del usuario.
-     * @return Boolean a true si ya existe ese login en la base de datos.
-     * @throws DAOException
+     * Check that the login no longer exists in the database.
+     * @param login login del usuario / The login of the user.
+     * @return Boolean a true si ya existe ese login en la base de datos. / 
+     * Boolean true if exists the login in the data base.
+     * @throws DAOException Si ocurre algun error con la base de datos. / If
+     * occurs a error with the data base.
      */
     @Override
     public boolean verificarLogin(String login) throws DAOException {
         boolean loginExiste = false;
         try{
-            //this.abrirConexion();
             this.con=this.poolBD.extraerConexion();
             this.con.setAutoCommit(true);
             String select = "select * from user where login='" + login+"'";
@@ -131,10 +67,13 @@ public class DAOImplementation implements DAO{
     }
     /**
      * Comprueba que el login y la contraseña existen y son correctos.
-     * @param login login del usuario.
-     * @param password contraseña del usuario.
-     * @return Objeto User con toda la información del usuario.
-     * @throws DAOException
+     * Check that the login and password exist and are correct.
+     * @param login login del usuario. / The login of the user.
+     * @param password contraseña del usuario. / The password of the user.
+     * @return Objeto User con toda la información del usuario. / The User 
+     * object with the all information.
+     * @throws DAOException Si ocurre algun error con la base de datos. / If
+     * occurs a error with the data base.
      */
     @Override
     public User verificarLoginPassword(String login, String password)
@@ -186,10 +125,14 @@ public class DAOImplementation implements DAO{
         return usuario;
     }
     /**
-     * Añade un objeto usuario a la base de datos.
-     * @param usuario Objeto registrado por el usuario.
+     * Añade un objeto usuario a la base de datos. 
+     * Adds a user object in the data base.
+     * @param usuario Objeto registrado por el usuario. / Object registered by 
+     * the user.
      * @return Boolean a true si se ha insertado de forma correcta y false si no.
-     * @throws DAOException
+     * Boolean with true if has been inserted correctly or false if hasn't.
+     * @throws DAOException Si ocurre algun error con la base de datos. / If
+     * occurs a error with the data base.
      */
     @Override
     public boolean registrarUser(User usuario) throws DAOException {
@@ -216,8 +159,10 @@ public class DAOImplementation implements DAO{
     
     /**
      * Actualiza la fecha del ultimo acceso.
-     * @param login login del usuario.
-     * @throws DAOException
+     * Update the date of the last access.
+     * @param login login del usuario. / The User login.
+     * @throws DAOException Si ocurre algun error con la base de datos. / If
+     * occurs a error with the data base.
      */
     @Override
     public void ultimoAcceso(String login) throws DAOException {

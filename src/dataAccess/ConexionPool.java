@@ -1,8 +1,3 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
 package dataAccess;
 
 import java.sql.Connection;
@@ -10,14 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Stack;
 
-//import java.util.Stack;
 
 /**
- * Conexion con la base de datos
+ * Conexión con la base de datos.
+ * Connection to the database.
  * @author sergio
  */
 import java.util.ResourceBundle;
-//import java.util.logging.Logger;
 public class ConexionPool {
     private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("dataAccess.ConexionPool");
     private   static String config="dataAccess.dbConf";
@@ -28,7 +22,8 @@ public class ConexionPool {
     protected static String password;
     
     /**
-     *inicializa los valores de conexion a la base a partir del config
+     * Inicializa los valores de conexion a la base de datos a partir del config.
+     * Initializes the connection values to the base data from the config.
      */
     public ConexionPool(){
         configFile=ResourceBundle.getBundle(config);
@@ -38,9 +33,12 @@ public class ConexionPool {
         pool = new Stack();
     }
     /**
-     * crea una conexin a la base de datos
-     * @return una conexion nueva o una ya abierta
-     * @throws SQLException
+     * Crea una conexión a la base de datos.
+     * Creates a connection to the database.
+     * @return una conexion nueva o una ya abierta / a new connection or one
+     * already opened
+     * @throws SQLException Si ocurre algun error al conectarse / If occurs error
+     * when it try connecting.
      */
     public synchronized  Connection extraerConexion() throws SQLException{
         if(!pool.empty()) {
@@ -51,12 +49,13 @@ public class ConexionPool {
         }
     }
     /**
-     * liberamos la conexion a la base de datos
-     * @param conn la conexion que se quiere cerrar
-     * @throws SQLException
+     * Guarda las conexiones.
+     * Pick up the connection.
+     * @param conn La conexión a cerrar / The connection to save.
+     * @throws SQLException Si ocurre algun error al conectarse / If occurs error
+     * when it try connecting.
      */
     public synchronized  void liberarConexion(Connection conn){
-        //throws SQLException
         pool.push(conn);
     }
     

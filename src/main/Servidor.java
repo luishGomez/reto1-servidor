@@ -1,8 +1,3 @@
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
 package main;
 
 import java.io.IOException;
@@ -12,8 +7,8 @@ import java.util.ResourceBundle;
 
 
 /**
- * La clase main del lado servidor.
- * The main class of the server side.
+ * La clase main del lado servidor que gestiona las peticiones de los clientes.
+ * The main class of the server side that handles client requests.
  * @author Ricardo Peinado Lastra
  */
 public class Servidor {
@@ -36,7 +31,6 @@ public class Servidor {
                         SocketHilo socketHilo=new SocketHilo(socket,true);
                         socketHilo.start();
                     }else{
-                        //incrementarHilo();
                         SocketHilo socketHilo=new SocketHilo(socket,false);
                         socketHilo.start();
                     }
@@ -57,10 +51,22 @@ public class Servidor {
         contador--;
         LOGGER.info("HILOS ACTUALES "+contador);
     }
+    /**
+     * Incrementa el contador de hilos del servidor.
+     * Increase the thread count of the server.
+     */
     synchronized static public void incrementarHilo(){
         contador++;
         LOGGER.info("HILOS ACTUALES "+contador);
     }
+    /**
+     * Compara el contador de clientes actuales con los hilos máximos que pueden
+     * haber.
+     * Compare the current client counter with the maximum threads that may exist.
+     * @return True si hay menos clientes que el máximo de hilos permitidos | 
+     * False en cualquier otro caso / True if there are fewer customers than the 
+     * maximum allowed threads | False in any other case
+     */
     synchronized static public boolean acceso(){
         boolean resu=false;
         if(contador<hilos){
