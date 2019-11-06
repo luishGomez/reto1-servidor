@@ -4,22 +4,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Stack;
-
+import java.util.ResourceBundle;
 
 /**
  * Conexión con la base de datos.
  * Connection to the database.
  * @author sergio
  */
-import java.util.ResourceBundle;
 public class ConexionPool {
     private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger("dataAccess.ConexionPool");
-    private   static String config="dataAccess.dbConf";
-    private   static ResourceBundle configFile;
-    protected static Stack pool;
-    protected static String connectionURL;
-    protected static String userName;
-    protected static String password;
+    private static String config="dataAccess.dbConf";
+    private static ResourceBundle configFile;
+    private static Stack pool;
+    private static String connectionURL;
+    private static String userName;
+    private static String password;
     
     /**
      * Inicializa los valores de conexion a la base de datos a partir del config.
@@ -52,8 +51,6 @@ public class ConexionPool {
      * Guarda las conexiones.
      * Pick up the connection.
      * @param conn La conexión a cerrar / The connection to save.
-     * @throws SQLException Si ocurre algun error al conectarse / If occurs error
-     * when it try connecting.
      */
     public synchronized  void liberarConexion(Connection conn){
         pool.push(conn);
