@@ -116,6 +116,7 @@ public class SocketHilo extends Thread{
         }catch(IOException e){
             LOGGER.severe(e.getMessage());
         }finally{
+            boolean liberarHiloConfirmar=false;
             try{
                 if(flujo_salida!=null)
                     flujo_salida.close();
@@ -123,10 +124,14 @@ public class SocketHilo extends Thread{
                     flujo_entrada.close();
                 if(!miSocket.isClosed())                    
                     miSocket.close();
-                if(libre)
+                if(libre){
                     Servidor.liberarHilo();
+                    liberarHiloConfirmar=true;
+                }
             }catch(IOException e){
                 LOGGER.severe("NO SE HAN CERRADO BIEN LOS FLUJOS/SOCKET ||"+e.getMessage());
+                if(!liberarHiloConfirmar)
+                    Servidor.liberarHilo();
             }
         }
     }
