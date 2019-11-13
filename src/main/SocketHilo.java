@@ -76,8 +76,6 @@ public class SocketHilo extends Thread{
                             String password =((User)mensajeInicio.getData()).getPassword();
                             User user=dao.verificarLoginPassword(login, password);
                             if(user!=null){
-                                dao.ultimoAcceso(login);
-                                LOGGER.info("Ultimo acceso actualizado.");
                                 mensajeFin=new Mensaje(2,user);
                             }else{
                                 if(dao.verificarLogin(login)){
@@ -90,6 +88,16 @@ public class SocketHilo extends Thread{
                             
                             
                             LOGGER.info("INICIO SESIÓN terminado.");
+                            break;
+                        case 3:
+                            LOGGER.info("Iniciamos el NUEVO ACCESO.");
+                            
+                            login= (String)mensajeInicio.getData();
+                            dao.ultimoAcceso(login);
+                            LOGGER.info("Ultimo acceso actualizado.");
+                            mensajeFin=new Mensaje(3,true);
+                            flujo_salida.writeObject(mensajeFin);
+                            LOGGER.info("NUEVO ACCESO terminado.");
                             break;
                             
                     }

@@ -111,8 +111,8 @@ public class DAOImplementation implements DAO{
                     usuario = new User(rs.getInt("id"),
                             rs.getString("login"),rs.getString("email"),
                             rs.getString("fullname"),status,privilege,
-                            rs.getString("password"),rs.getDate("lastAccess"),
-                            rs.getDate("lastPasswordChange"));
+                            rs.getString("password"),rs.getTimestamp("lastAccess"),
+                            rs.getTimestamp("lastPasswordChange"));
                 }
                 rs.close();
             }
@@ -145,9 +145,11 @@ public class DAOImplementation implements DAO{
                     + "values('"+usuario.getLogin()+"','"+usuario.getEmail()+"','"
                     + usuario.getFullname()+"',0,"
                     + "1"+",'"+usuario.getPassword()+"',"
-                    + "date(now())"+","
-                    + "date(now())"+");";
-            pstmt.executeUpdate(insert);
+                    + "now()"+","
+                    + "now()"+");";
+            pstmt = this.con.prepareStatement(insert);
+            pstmt.execute();
+            //pstmt.executeUpdate(insert);
         }catch(Exception e){
             LOGGER.severe(e.getMessage());
             throw new DAOException();
@@ -169,9 +171,12 @@ public class DAOImplementation implements DAO{
         try{
             this.con=this.poolBD.extraerConexion();
             this.con.setAutoCommit(true);
-            String update = "update user set lastAccess=date(now())";
-            pstmt.executeUpdate(update);
-        }catch(Exception e){
+            LOGGER.info("---------> "+login);
+            String update = "update user set lastAccess=now() where login='1234'";
+            pstmt = this.con.prepareStatement(update);
+            pstmt.executeUpdate();
+            //pstmt.executeUpdate(update);
+        }catch(SQLException e){
             LOGGER.severe(e.getMessage());
             throw new DAOException();
         }finally{
